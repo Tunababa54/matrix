@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f0f0f0;
+            overflow: hidden;
+        }
+        .eyes {
+            display: flex;
+            gap: 50px;
+        }
+        .eye {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .pupil {
+            width: 30px;
+            height: 30px;
+            background: #222;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="eyes">
+        <div class="eye">
+            <div class="pupil" id="pupil1"></div>
+        </div>
+        <div class="eye">
+            <div class="pupil" id="pupil2"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('mousemove', (e) => {
+            const pupils = [document.getElementById('pupil1'), document.getElementById('pupil2')];
+            
+            pupils.forEach((pupil, index) => {
+                const eye = pupil.parentElement;
+                const eyeRect = eye.getBoundingClientRect();
+                const eyeX = eyeRect.left + eyeRect.width / 2;
+                const eyeY = eyeRect.top + eyeRect.height / 2;
+                
+                const angle = Math.atan2(e.pageY - eyeY, e.pageX - eyeX);
+                const distance = Math.min(20, 
+                    Math.sqrt(Math.pow(e.pageX - eyeX, 2) + Math.pow(e.pageY - eyeY, 2)) / 10);
+                
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+                
+                pupil.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            });
+        });
+    </script>
+</body>
+</html>
